@@ -1,0 +1,14 @@
+{
+  "id": "metode-regula-falsi",
+  "title": "Metode Regula Falsi",
+  "name": "animasi-metode-regula-falsi",
+  "version": "1.0.4",
+  "description": "Visualisasi interaktif dan animasi metode Regula Falsi (Posisi Palsu)",
+  "display": "standalone",
+  "entry": "index.html",
+  "features": {
+    "progress": true,
+    "completion": true,
+    "score": false
+  }
+}

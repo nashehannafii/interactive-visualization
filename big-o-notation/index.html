@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Animasi Big O Notation</title>
+    <link rel="stylesheet" href="assets/material.css">
+    <link rel="stylesheet" href="assets/bigo.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header"
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <div class="eyebrow">Struktur Data & Algoritma</div>
+                <h1>Animasi Big O Notation</h1>
+                <p class="subtitle">Eksplorasi visual bagaimana kompleksitas waktu berbagai algoritma bertumbuh seiring
+                    bertambahnya ukuran input <strong>n</strong>.</p>
+            </div>
+            <div>
+                <a href="javascript:window.close();" class="btn btn-secondary" style="text-decoration: none;">
+                    ✕ Close
+                </a>
+            </div>
+        </header>
+
+        <!-- Tahap 1: Intuisi Big O -->
+        <section class="card" aria-labelledby="intuition-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 1</div>
+                    <h2 id="intuition-title">Intuisi Big O Notation</h2>
+                </div>
+                <span class="status-pill" id="intuitionStatus">Siap</span>
+            </div>
+            <p class="section-desc">Pelajari mengapa kita butuh Big O, apa artinya secara intuitif, dan bagaimana
+                membandingkan kecepatan pertumbuhan algoritma.</p>
+            <div class="canvas-wrap">
+                <canvas id="intuitionCanvas" aria-label="Visualisasi intuisi big o notation"></canvas>
+            </div>
+            <div class="step-box">
+                <div class="step-title" id="intuitionStepTitle"></div>
+                <div class="step-text" id="intuitionStepText"></div>
+                <div class="formula-box" id="intuitionFormula"></div>
+            </div>
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" id="intuitionPrev">← Sebelumnya</button>
+                <button type="button" class="btn btn-primary" id="intuitionNext">Berikutnya →</button>
+                <button type="button" class="btn btn-primary" id="intuitionPlay">▶ Play Intuisi</button>
+                <button type="button" class="btn btn-secondary" id="intuitionReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <!-- Tahap 2: Grafik Perbandingan Interaktif -->
+        <section class="card" aria-labelledby="comparison-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 2</div>
+                    <h2 id="comparison-title">Perbandingan Laju Pertumbuhan</h2>
+                </div>
+                <span class="status-pill" id="nValueLabel">n = 10</span>
+            </div>
+            <p class="section-desc">Geser slider untuk mengubah ukuran input <strong>n</strong> dan amati bagaimana
+                jumlah operasi meledak pada kompleksitas tinggi.</p>
+
+            <div class="slider-group">
+                <label for="nSlider">Ukuran Input (n):</label>
+                <input type="range" id="nSlider" min="1" max="64" value="10" class="slider">
+                <span class="slider-value" id="sliderValue">10</span>
+            </div>
+
+            <div class="chart-container" style="height: 420px;">
+                <canvas id="comparisonChart" aria-label="Grafik perbandingan kompleksitas Big O"></canvas>
+            </div>
+
+            <div class="legend" id="comparisonLegend"></div>
+        </section>
+
+        <!-- Tahap 3: Simulasi Langkah Demi Langkah -->
+        <section class="card" aria-labelledby="simulation-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 3</div>
+                    <h2 id="simulation-title">Simulasi Operasi Per Kompleksitas</h2>
+                </div>
+            </div>
+            <p class="section-desc">Lihat animasi banyaknya "operasi" yang harus dilakukan oleh masing-masing kelas Big
+                O untuk input berukuran <strong>n</strong>.</p>
+
+            <div class="slider-group">
+                <label for="simSlider">Ukuran Input (n):</label>
+                <input type="range" id="simSlider" min="1" max="20" value="8" class="slider">
+                <span class="slider-value" id="simSliderValue">8</span>
+            </div>
+
+            <div id="barContainer" class="bar-container"></div>
+
+            <div class="controls">
+                <button type="button" class="btn btn-primary" id="simPlay">▶ Animasi</button>
+                <button type="button" class="btn btn-secondary" id="simReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <!-- Tahap 4: Tabel Perbandingan -->
+        <section class="card" aria-labelledby="table-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Data</div>
+                    <h2 id="table-title">Tabel Jumlah Operasi</h2>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>n</th>
+                            <th>O(1)</th>
+                            <th>O(log n)</th>
+                            <th>O(n)</th>
+                            <th>O(n log n)</th>
+                            <th>O(n²)</th>
+                            <th>O(2ⁿ)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tahap 5: Cheat Sheet -->
+        <section class="card" aria-labelledby="cheat-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Ringkasan</div>
+                    <h2 id="cheat-title">Big O Cheat Sheet</h2>
+                </div>
+            </div>
+            <div id="cheatSheet" class="cheat-grid"></div>
+        </section>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>

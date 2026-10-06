@@ -1,0 +1,14 @@
+{
+  "id": "big-o-notation",
+  "title": "Big O Notation",
+  "name": "animasi-big-o-notation",
+  "version": "1.0.1",
+  "description": "Visualisasi interaktif kompleksitas algoritma dan Big O Notation.",
+  "type": "interactive-html",
+  "entry": "index.html",
+  "features": {
+    "progress": true,
+    "completion": true,
+    "score": false
+  }
+}

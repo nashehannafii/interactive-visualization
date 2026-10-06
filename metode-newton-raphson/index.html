@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Animasi Metode Newton-Raphson</title>
+    <link rel="stylesheet" href="assets/material.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header"
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <div class="eyebrow">Metode Numerik</div>
+                <h1>Animasi Metode Newton-Raphson</h1>
+                <p class="subtitle">Eksplorasi intuisi garis singgung (tangen), turunan f'(x), dan konvergensi kuadratis
+                    metode Newton-Raphson untuk <strong>f(x) = x² - 2</strong>.</p>
+            </div>
+            <div>
+                <a href="javascript:window.close();" class="btn btn-secondary" style="text-decoration: none;">
+                    ✕ Close
+                </a>
+            </div>
+        </header>
+
+        <section class="card input-card" aria-labelledby="input-title">
+            <h2 id="input-title">Parameter Awal</h2>
+            <form id="nrForm" class="input-form" novalidate>
+                <div class="input-group">
+                    <label for="x0">Tebakan awal (x₀)</label>
+                    <input type="number" step="any" id="x0" value="2.0" required>
+                </div>
+                <div class="input-group">
+                    <label for="step">Batas iterasi</label>
+                    <input type="number" id="step" min="1" max="100" value="10" required>
+                </div>
+                <div class="input-action">
+                    <button type="submit" class="btn btn-primary">Hitung</button>
+                </div>
+            </form>
+            <div class="formula-summary" id="formulaSummary" aria-live="polite"></div>
+            <div class="alert alert-error is-hidden" id="errorBox" role="alert"></div>
+        </section>
+
+        <section class="card" aria-labelledby="intuition-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 1</div>
+                    <h2 id="intuition-title">Intuisi Metode Newton-Raphson</h2>
+                </div>
+                <span class="status-pill" id="intuitionStatus">Siap</span>
+            </div>
+            <p class="section-desc">Gunakan nilai awal x₀, tarik garis tegak ke kurva untuk mendapatkan titik (x₀,
+                f(x₀)), buat garis singgung (tangen) f'(x₀), lalu cari perpotongannya dengan sumbu-x untuk memperoleh
+                x₁.</p>
+            <div class="canvas-wrap">
+                <canvas id="nrIntuitionCanvas" aria-label="Visualisasi intuisi metode newton raphson"></canvas>
+            </div>
+            <div class="step-box">
+                <div class="step-title" id="intuitionStepTitle"></div>
+                <div class="step-text" id="intuitionStepText"></div>
+                <div class="formula-box" id="intuitionFormula"></div>
+            </div>
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" id="intuitionPrev">← Sebelumnya</button>
+                <button type="button" class="btn btn-primary" id="intuitionNext">Berikutnya →</button>
+                <button type="button" class="btn btn-primary" id="intuitionPlay">▶ Play Intuisi</button>
+                <button type="button" class="btn btn-secondary" id="intuitionReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="iteration-section-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 2</div>
+                    <h2 id="iteration-section-title">Animasi Perhitungan Newton-Raphson</h2>
+                </div>
+                <span class="status-pill" id="iterationCounter">Iterasi 1</span>
+            </div>
+            <p class="section-desc">Perhatikan bagaimana nilai x_n diperbarui melalui kemiringan garis singgung f'(x)
+                hingga mendekati akar sejati √2.</p>
+
+            <div class="number-line-wrapper">
+                <div class="number-line"></div>
+                <div id="activeInterval" class="active-interval"></div>
+                <div id="pointCurr" class="point point-a"></div>
+                <div id="pointNext" class="point point-c"></div>
+                <div id="labelCurr" class="point-label label-a"></div>
+                <div id="labelNext" class="point-label label-c"></div>
+                <div class="axis-label axis-start" id="axisStart"></div>
+                <div class="axis-label axis-end" id="axisEnd"></div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info">
+                    <div class="name">Tebakan saat ini (xₙ)</div>
+                    <div class="value" id="valueCurr">-</div>
+                </div>
+                <div class="info">
+                    <div class="name">Turunan f'(xₙ) = 2xₙ</div>
+                    <div class="value" id="valueDeriv">-</div>
+                </div>
+                <div class="info">
+                    <div class="name">Tebakan berikutnya (xₙ₊₁) = xₙ - f(xₙ)/f'(xₙ)</div>
+                    <div class="value" id="valueNext">-</div>
+                </div>
+            </div>
+
+            <div class="error-grid">
+                <div class="error-box">
+                    <div class="error-name">Nilai |f(xₙ)|</div>
+                    <div class="error-value" id="errorInterval">-</div>
+                </div>
+                <div class="error-box">
+                    <div class="error-name">Perubahan pendekatan <strong>|xₙ₊₁ - xₙ|</strong></div>
+                    <div class="error-value" id="errorC">-</div>
+                </div>
+            </div>
+
+            <div class="decision" id="decision" aria-live="polite"></div>
+
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" id="stepPrev">← Sebelumnya</button>
+                <button type="button" class="btn btn-primary" id="stepNext">Berikutnya →</button>
+                <button type="button" class="btn btn-primary" id="stepPlay">▶ Play</button>
+                <button type="button" class="btn btn-secondary" id="stepPause">⏸ Pause</button>
+                <button type="button" class="btn btn-secondary" id="stepReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="chart-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Konvergensi</div>
+                    <h2 id="chart-title">Kurva Konvergensi Error Newton-Raphson</h2>
+                </div>
+            </div>
+            <p class="section-desc">Grafik menunjukkan penurunan sangat cepat (konvergensi kuadratis) pada galat |f(xₙ)|
+                dan |Δx|.</p>
+            <div class="chart-container">
+                <canvas id="errorChart" aria-label="Grafik error metode newton raphson"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><span class="legend-line legend-interval"></span>Nilai |f(xₙ)|</div>
+                <div class="legend-item"><span class="legend-line legend-c"></span>Perubahan x: |xₙ₊₁ - xₙ|</div>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="table-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Data</div>
+                    <h2 id="table-title">Tabel Iterasi Newton-Raphson</h2>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Iterasi (n)</th>
+                            <th>xₙ</th>
+                            <th>f(xₙ)</th>
+                            <th>f'(xₙ)</th>
+                            <th>xₙ₊₁</th>
+                            <th>|f(xₙ)|</th>
+                            <th>|Δx|</th>
+                        </tr>
+                    </thead>
+                    <tbody id="iterationTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>

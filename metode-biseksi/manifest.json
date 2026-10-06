@@ -1,0 +1,13 @@
+{
+  "id": "metode-biseksi",
+  "title": "Metode Biseksi",
+  "version": "1.0.3",
+  "description": "Materi interaktif metode biseksi untuk pencarian akar persamaan nonlinear.",
+  "type": "interactive-html",
+  "entry": "index.html",
+  "features": {
+    "progress": true,
+    "completion": true,
+    "score": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "metode-newton-raphson",
+  "title": "Metode Newton-Raphson",
+  "name": "animasi-metode-newton-raphson",
+  "version": "1.0.1",
+  "description": "Visualisasi interaktif dan animasi metode Newton-Raphson dengan kurva garis singgung (tangen).",
+  "type": "interactive-html",
+  "entry": "index.html",
+  "features": {
+    "progress": true,
+    "completion": true,
+    "score": false
+  }
+}

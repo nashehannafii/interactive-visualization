@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Animasi Metode Regula Falsi</title>
+    <link rel="stylesheet" href="assets/material.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header"
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <div class="eyebrow">Metode Numerik</div>
+                <h1>Animasi Metode Regula Falsi</h1>
+                <p class="subtitle">Eksplorasi intuisi garis sekan (posisi palsu), iterasi, dan konvergensi metode
+                    Regula Falsi untuk <strong>f(x) = x² - 2</strong>.</p>
+            </div>
+            <div>
+                <a href="javascript:window.close();" class="btn btn-secondary" style="text-decoration: none;">
+                    ✕ Close
+                </a>
+            </div>
+        </header>
+
+        <section class="card input-card" aria-labelledby="input-title">
+            <h2 id="input-title">Parameter Awal</h2>
+            <form id="rfForm" class="input-form" novalidate>
+                <div class="input-group">
+                    <label for="a">Batas kiri (a)</label>
+                    <input type="number" step="any" id="a" value="0" required>
+                </div>
+                <div class="input-group">
+                    <label for="b">Batas kanan (b)</label>
+                    <input type="number" step="any" id="b" value="2" required>
+                </div>
+                <div class="input-group">
+                    <label for="step">Batas iterasi</label>
+                    <input type="number" id="step" min="1" max="100" value="10" required>
+                </div>
+                <div class="input-action">
+                    <button type="submit" class="btn btn-primary">Hitung</button>
+                </div>
+            </form>
+            <div class="formula-summary" id="formulaSummary" aria-live="polite"></div>
+            <div class="alert alert-error is-hidden" id="errorBox" role="alert"></div>
+        </section>
+
+        <section class="card" aria-labelledby="intuition-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 1</div>
+                    <h2 id="intuition-title">Intuisi Metode Regula Falsi</h2>
+                </div>
+                <span class="status-pill" id="intuitionStatus">Siap</span>
+            </div>
+            <p class="section-desc">Hubungkan titik (a, f(a)) dan (b, f(b)) dengan garis lurus (sekan). Titik potong
+                garis ini dengan sumbu-x dijadikan perkiraan akar (c).</p>
+            <div class="canvas-wrap">
+                <canvas id="rfIntuitionCanvas" aria-label="Visualisasi intuisi metode regula falsi"></canvas>
+            </div>
+            <div class="step-box">
+                <div class="step-title" id="intuitionStepTitle"></div>
+                <div class="step-text" id="intuitionStepText"></div>
+                <div class="formula-box" id="intuitionFormula"></div>
+            </div>
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" id="intuitionPrev">← Sebelumnya</button>
+                <button type="button" class="btn btn-primary" id="intuitionNext">Berikutnya →</button>
+                <button type="button" class="btn btn-primary" id="intuitionPlay">▶ Play Intuisi</button>
+                <button type="button" class="btn btn-secondary" id="intuitionReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="iteration-section-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Tahap 2</div>
+                    <h2 id="iteration-section-title">Animasi Perhitungan Regula Falsi</h2>
+                </div>
+                <span class="status-pill" id="iterationCounter">Iterasi 1</span>
+            </div>
+            <p class="section-desc">Perhatikan bagaimana garis sekan terus memperbarui batas a atau b hingga nilai c
+                mendekati akar sejati.</p>
+
+            <div class="number-line-wrapper">
+                <div class="number-line"></div>
+                <div id="activeInterval" class="active-interval"></div>
+                <div id="pointA" class="point point-a"></div>
+                <div id="pointB" class="point point-b"></div>
+                <div id="pointC" class="point point-c"></div>
+                <div id="labelA" class="point-label label-a"></div>
+                <div id="labelB" class="point-label label-b"></div>
+                <div id="labelC" class="point-label label-c"></div>
+                <div class="axis-label axis-start" id="axisStart"></div>
+                <div class="axis-label axis-end" id="axisEnd"></div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info">
+                    <div class="name">Batas kiri (a)</div>
+                    <div class="value" id="valueA">-</div>
+                </div>
+                <div class="info">
+                    <div class="name">Titik potong c = (a f(b) - b f(a)) / (f(b) - f(a))</div>
+                    <div class="value" id="valueC">-</div>
+                </div>
+                <div class="info">
+                    <div class="name">Batas kanan (b)</div>
+                    <div class="value" id="valueB">-</div>
+                </div>
+            </div>
+
+            <div class="error-grid">
+                <div class="error-box">
+                    <div class="error-name">Nilai |f(c)|</div>
+                    <div class="error-value" id="errorInterval">-</div>
+                </div>
+                <div class="error-box">
+                    <div class="error-name">Perubahan pendekatan <strong>|cᵢ-cᵢ₋₁|</strong></div>
+                    <div class="error-value" id="errorC">-</div>
+                </div>
+            </div>
+
+            <div class="decision" id="decision" aria-live="polite"></div>
+
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" id="stepPrev">← Sebelumnya</button>
+                <button type="button" class="btn btn-primary" id="stepNext">Berikutnya →</button>
+                <button type="button" class="btn btn-primary" id="stepPlay">▶ Play</button>
+                <button type="button" class="btn btn-secondary" id="stepPause">⏸ Pause</button>
+                <button type="button" class="btn btn-secondary" id="stepReset">↺ Reset</button>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="chart-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Konvergensi</div>
+                    <h2 id="chart-title">Kurva Konvergensi Error Regula Falsi</h2>
+                </div>
+            </div>
+            <p class="section-desc">Grafik menunjukkan bagaimana nilai |f(c)| dan |Δc| menurun seiring berjalannya
+                iterasi.</p>
+            <div class="chart-container">
+                <canvas id="errorChart" aria-label="Grafik error metode regula falsi"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><span class="legend-line legend-interval"></span>Nilai |f(c)|</div>
+                <div class="legend-item"><span class="legend-line legend-c"></span>Perubahan c: |cᵢ-cᵢ₋₁|</div>
+            </div>
+        </section>
+
+        <section class="card" aria-labelledby="table-title">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Data</div>
+                    <h2 id="table-title">Tabel Iterasi Regula Falsi</h2>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Iterasi</th>
+                            <th>a</th>
+                            <th>b</th>
+                            <th>c</th>
+                            <th>f(a)</th>
+                            <th>f(b)</th>
+                            <th>f(c)</th>
+                            <th>|f(c)|</th>
+                            <th>|Δc|</th>
+                        </tr>
+                    </thead>
+                    <tbody id="iterationTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>
